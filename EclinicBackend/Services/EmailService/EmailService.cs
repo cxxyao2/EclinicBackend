@@ -19,20 +19,16 @@ namespace EclinicBackend.Services.EmailService
             _configuration = configuration;
 
             // Try to get from environment variables first, then fall back to configuration
-            _emailServer = Environment.GetEnvironmentVariable("EmailConfiguration__Server")
-                ?? _configuration.GetSection("EmailConfiguration:Server").Value
+            _emailServer = _configuration.GetSection("EmailConfiguration:Server").Value
                 ?? throw new InvalidOperationException("Email server configuration is missing");
 
-            _emailFrom = Environment.GetEnvironmentVariable("EmailConfiguration__From")
-                ?? _configuration.GetSection("EmailConfiguration:From").Value
+            _emailFrom = _configuration.GetSection("EmailConfiguration:From").Value
                 ?? throw new InvalidOperationException("Email from address is missing");
 
-            _emailPassword = Environment.GetEnvironmentVariable("EmailConfiguration__Password")
-                ?? _configuration.GetSection("EmailConfiguration:Password").Value
+            _emailPassword = _configuration.GetSection("EmailConfiguration:Password").Value
                 ?? throw new InvalidOperationException("Email password is missing");
 
-            _emailPort = Environment.GetEnvironmentVariable("EmailConfiguration__Port")
-                ?? _configuration.GetSection("EmailConfiguration:Port").Value
+            _emailPort = _configuration.GetSection("EmailConfiguration:Port").Value
                 ?? throw new InvalidOperationException("Email port is missing");
         }
 
