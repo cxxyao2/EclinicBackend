@@ -60,7 +60,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 // builder.Services.AddScoped<IChatService, ChatService>();
 // builder.Services.AddScoped<IUserLogHistoryService, UserLogHistoryService>();
 
-var allowedOrigins = builder.Configuration["WEBSITE_CORS_ALLOWED_ORIGINS"] ?? throw new InvalidOperationException("variable 'WEBSITE_CORS_ALLOWED_ORIGIN' not found.");
+var allowedOrigins = builder.Configuration["WEBSITE_CORS_ALLOWED_ORIGINS"] ?? throw new InvalidOperationException("variable 'WEBSITE_CORS_ALLOWED_ORIGINS' not found.");
 
 var _emailServer = builder.Configuration.GetSection("EmailConfiguration:Server").Value
                ?? throw new InvalidOperationException("Email server configuration is missing");

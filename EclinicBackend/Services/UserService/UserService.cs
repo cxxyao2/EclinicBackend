@@ -74,10 +74,7 @@ namespace EclinicBackend.Services
 
         public async Task Delete(int id)
         {
-            User? user = _context.Users.FirstOrDefault(x => x.UserID == id);
-            if (user == null)
-                throw new KeyNotFoundException($"User {id} not found");
-
+            User? user = await _context.Users.FirstOrDefaultAsync(x => x.UserID == id) ?? throw new KeyNotFoundException($"User {id} not found");
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
