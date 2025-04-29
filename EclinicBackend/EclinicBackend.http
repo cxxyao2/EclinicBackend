@@ -1,0 +1,6 @@
+@EclinicBackend_HostAddress = http://localhost:5277
+
+GET {{EclinicBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
