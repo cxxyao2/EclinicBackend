@@ -2,12 +2,30 @@ using System.Text;
 using EclinicBackend;
 using EclinicBackend.Data;
 using EclinicBackend.Enums;
+using EclinicBackend.Hubs;
 using EclinicBackend.Services;
+using EclinicBackend.Services.AppointmentService;
+using EclinicBackend.Services.AuthService;
+using EclinicBackend.Services.BedService;
+using EclinicBackend.Services.EmailService;
+using EclinicBackend.Services.ImageRecordService;
+using EclinicBackend.Services.InpatientService;
+using EclinicBackend.Services.LabTestService;
+using EclinicBackend.Services.MedicationService;
+using EclinicBackend.Services.PatientService;
+using EclinicBackend.Services.PractitionerAvailabilityService;
+using EclinicBackend.Services.PractitionerScheduleService;
+using EclinicBackend.Services.PractitionerService;
+using EclinicBackend.Services.PrescriptionService;
+using EclinicBackend.Services.UserLogHistoryService;
+using EclinicBackend.Services.VisitRecordService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
@@ -33,7 +51,23 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IPractitionerService, PractitionerService>();
+builder.Services.AddScoped<IPractitionerAvailabilityService, PractitionerAvailabilityService>();
+builder.Services.AddScoped<IVisitRecordService, VisitRecordService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IMedicationService, MedicationService>();
+builder.Services.AddScoped<ILabTestService, LabTestService>();
+builder.Services.AddScoped<IImageRecordService, ImageRecordService>();
+builder.Services.AddScoped<IInpatientService, InpatientService>();
+builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IPractitionerScheduleService, PractitionerScheduleService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBedService, BedService>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IUserLogHistoryService, UserLogHistoryService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -87,10 +121,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowConfiguredOrigins");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
