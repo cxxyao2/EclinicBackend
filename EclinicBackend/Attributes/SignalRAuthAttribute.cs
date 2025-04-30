@@ -8,7 +8,7 @@ namespace EclinicBackend.Attributes
     {
         public SignalRAuthAttribute()
         {
-            Policy = "MedicalStaffPolicy"; // Set the policy name
+            Policy = "MedicalStaff"; // Set the policy name
         }
     }
 }

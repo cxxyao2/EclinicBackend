@@ -2,6 +2,7 @@ using System.Text;
 using EclinicBackend;
 using EclinicBackend.Data;
 using EclinicBackend.Enums;
+using EclinicBackend.Helpers;
 using EclinicBackend.Hubs;
 using EclinicBackend.Services;
 using EclinicBackend.Services.AppointmentService;
@@ -25,10 +26,11 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSignalR();
 
 // Add services to the container.
-builder.Services.AddHttpContextAccessor();
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection") ?? throw new InvalidOperationException("Connection string 'PostgresConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -122,12 +124,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowConfiguredOrigins");
+
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapControllers();
 
 app.MapHub<ChatHub>("/chatHub");
 
-app.Run();
+await app.RunAsync();
