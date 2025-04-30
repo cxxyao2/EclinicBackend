@@ -10,6 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection") ?? throw new InvalidOperationException("Connection string 'PostgresConnection' not found.");
 var allowedOrigins = builder.Configuration["WEBSITE_CORS_ALLOWED_ORIGINS"] ?? throw new InvalidOperationException("variable 'WEBSITE_CORS_ALLOWED_ORIGINS' not found.");
+var _emailServer = builder.Configuration.GetSection("EmailConfiguration:Server").Value
+               ?? throw new InvalidOperationException("Email server configuration is missing");
+
+var _emailFrom = builder.Configuration.GetSection("EmailConfiguration:From").Value
+            ?? throw new InvalidOperationException("Email from address is missing");
+
+var _emailPassword = builder.Configuration.GetSection("EmailConfiguration:Password").Value
+         ?? throw new InvalidOperationException("Email password is missing");
+
+var _emailPort = builder.Configuration.GetSection("EmailConfiguration:Port").Value
+      ?? throw new InvalidOperationException("Email port is missing");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
