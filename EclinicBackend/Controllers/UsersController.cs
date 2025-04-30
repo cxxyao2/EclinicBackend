@@ -21,7 +21,7 @@ namespace EclinicBackend.Controllers
             _userService = userService;
         }
 
-
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateUser(UserUpdateDto user)
         {
